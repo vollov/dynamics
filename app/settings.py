@@ -53,6 +53,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'dynamics.security.JWTAuthentication',
+#     )
+# }
+
 ROOT_URLCONF = 'app.urls'
 
 TEMPLATES = [
@@ -155,7 +161,7 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
-        'middleware.logfile': {
+        'dynamics.logfile': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': os.path.join(RESOURCE_ROOT,'logs/debug.log'),
@@ -169,13 +175,13 @@ LOGGING = {
         },
     },
     'loggers': {
-        'dynamics.middleware': {
-            'handlers': ['middleware.logfile', 'console'],
+        'dynamics': {
+            'handlers': ['dynamics.logfile', 'console'],
             'level': 'DEBUG',
             'propagate': True,
         },
         'security': {
-            'handlers': ['middleware.logfile', 'console'],
+            'handlers': ['dynamics.logfile', 'console'],
             'level': 'DEBUG',
             'propagate': True,
         },
@@ -201,3 +207,4 @@ CORS_URLS_REGEX = r'^/api/.*$'
 
 JWT_SECRET = 'JNIOI&(56!'
 JWT_SIGN_ALGORITHM = 'HS256'
+JWT_EXPIRE_IN_MINUTE=15

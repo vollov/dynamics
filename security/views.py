@@ -24,10 +24,13 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from jose import jwt
-from app.settings import JWT_SECRET, JWT_SIGN_ALGORITHM
+from app.settings import JWT_SECRET, JWT_SIGN_ALGORITHM, JWT_EXPIRE_IN_MINUTE
 
 import logging, json
 logger = logging.getLogger(__name__)
+
+from datetime import datetime
+from datetime import timedelta
 
 @api_view(['POST'])
 def login(request):
@@ -48,7 +51,10 @@ def login(request):
             if user.is_active:
                 logger.debug('user active, login() {0}, {1}'.format(request, user))
                 # return json token
-                token = jwt.encode({'username': username}, JWT_SECRET, algorithm=JWT_SIGN_ALGORITHM)
+                exp_time = datetime.utcnow() + timedelta(minutes=JWT_EXPIRE_IN_MINUTE)
+                payload = {'exp':exp_time, 'username': username}
+                
+                token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_SIGN_ALGORITHM)
                 return Response({'token': token }, status=status.HTTP_200_OK)
             else:
                 return Response({'error':'user has been disabled' }, status=status.HTTP_401_UNAUTHORIZED)
