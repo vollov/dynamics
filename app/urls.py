@@ -17,17 +17,15 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 from security.views import UserViewSet, GroupViewSet, login 
-from blog.views import BlogViewSet, TagViewSet, ExampleView
+from post.views import PostViewSet, TagViewSet, ExampleView, BlogViewSet
 from rest_framework import routers
 
 #router = routers.DefaultRouter()
 router = routers.SimpleRouter()
 router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
-router.register(r'blogs', BlogViewSet)
 router.register(r'tags', TagViewSet)
-
-
+router.register(r'groups', PostViewSet)
 
 urlpatterns = [
     
@@ -35,5 +33,6 @@ urlpatterns = [
     #url(r'^api/v1.0/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^login/', login, name='login'), 
     url(r'^api/v1.0/', include(router.urls)),
-    url(r'^api/v1.0/exs$', ExampleView.as_view()),
+    url(r'^api/v1.0/blogs/$', BlogViewSet.as_view({'get': 'list'})),
+    url(r'^api/v1.0/exs/$', ExampleView.as_view()),
 ]

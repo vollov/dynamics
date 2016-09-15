@@ -1,22 +1,29 @@
 from django.shortcuts import render
 
-from blog.models import Tag, Blog, BlogTag
+from post.models import Tag, Post, PostTag
 from rest_framework import viewsets
-from blog.serializers import BlogSerializer, TagSerializer, BlogTagSerializer
+from post.serializers import PostSerializer, TagSerializer, PostTagSerializer
 
 from dynamics.security import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-class BlogViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
+from rest_framework import mixins
+from rest_framework import generics
+
+
+class PostViewSet(viewsets.ModelViewSet):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
-    
-    queryset = Blog.objects.all().order_by('-created')
-    serializer_class = BlogSerializer
-    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    queryset = Post.objects.all().order_by('-created')
+    serializer_class = PostSerializer
+
+class BlogViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        queryset = Post.objects.all().order_by('-created')
+        serializer = PostSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 class TagViewSet(viewsets.ModelViewSet):
     """
@@ -25,12 +32,12 @@ class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     
-class BlogTagViewSet(viewsets.ModelViewSet):
+class PostTagViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Tags to be viewed or edited.
     """
-    queryset = BlogTag.objects.all()
-    serializer_class = BlogTagSerializer
+    queryset = PostTag.objects.all()
+    serializer_class = PostTagSerializer
     
 from rest_framework.response import Response
 from rest_framework.views import APIView

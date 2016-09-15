@@ -19,14 +19,17 @@ class Tag(models.Model):
     def __unicode__(self):
         return self.name
     
-class Blog(models.Model):
+class Post(models.Model):
     id = models.CharField(max_length=64, primary_key=True, verbose_name=u"Activation key",
                  default=uuid.uuid4)
     
     title = models.CharField(max_length=60, blank=False, null=False)
+    slug = models.SlugField(max_length=60, unique=True) # ,  blank=True, null=True
+
+    abstract = models.TextField(blank=False, null=False)
     content = models.TextField(blank=False, null=False)
     
-    tags = models.ManyToManyField(Tag, related_name='tags', through='BlogTag')
+    tags = models.ManyToManyField(Tag, related_name='tags', through='PostTag')
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -35,17 +38,17 @@ class Blog(models.Model):
     def __unicode__(self):
         return self.title
     
-class BlogTag(models.Model):
+class PostTag(models.Model):
     """
     blog and tag many to many relationship joint table
     """
     id = models.CharField(max_length=64, primary_key=True, verbose_name=u"Activation key",
                            default=uuid.uuid4)
     
-    blog = models.ForeignKey('Blog')
+    post = models.ForeignKey('Post')
     tag = models.ForeignKey('Tag')
     
     
     def __unicode__(self):
-        return self.blog.title + '_' + self.tag.name
+        return self.post.title + '_' + self.tag.name
     
