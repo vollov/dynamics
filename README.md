@@ -18,3 +18,4 @@ python-jose==1.3.2
 ```
 
 http://www.voidspace.org.uk/python/pycrypto-2.6.1/pycrypto-2.6.1.win-amd64-py2.7.exe
+mysqldump -uroot -p --databases skyler > skyler-0915.sql
