@@ -31,7 +31,7 @@ urlpatterns = [
     
     url(r'^admin/', admin.site.urls),
     #url(r'^api/v1.0/auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^login/', login, name='login'), 
+    url(r'^api/v1.0/login', login, name='login'), 
     url(r'^api/v1.0/', include(router.urls)),
     url(r'^api/v1.0/blogs/$', BlogViewSet.as_view({'get': 'list'})),
     url(r'^api/v1.0/exs/$', ExampleView.as_view()),

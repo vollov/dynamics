@@ -7,9 +7,6 @@ from post.serializers import PostSerializer, TagSerializer, PostTagSerializer
 from dynamics.security import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from rest_framework import mixins
-from rest_framework import generics
-
 
 class PostViewSet(viewsets.ModelViewSet):
     authentication_classes = (JWTAuthentication,)
